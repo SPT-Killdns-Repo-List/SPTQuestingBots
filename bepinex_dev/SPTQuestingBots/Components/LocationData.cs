@@ -36,14 +36,56 @@ namespace SPTQuestingBots.Components
         private Dictionary<WorldInteractiveObject, NoPowerTip> noPowerTipsForDoors = new Dictionary<WorldInteractiveObject, NoPowerTip>();
         private float maxExfilPointDistance = 0;
 
+        private bool isInitialized = false;
+        private float nextInitAttemptTime = 0f;
+        private const float InitRetryInterval = 0.5f;
+        private bool loggedInitWarning = false;
+
         protected void Awake()
         {
             gamePlayerOwner = FindObjectOfType<GamePlayerOwner>();
+        }
 
-            CurrentRaidSettings = FindObjectOfType<QuestingBotsPlugin>().GetComponent<TarkovData>().GetCurrentRaidSettings();
+        protected void Update()
+        {
+            if (!isInitialized)
+            {
+                if (Time.time >= nextInitAttemptTime)
+                {
+                    nextInitAttemptTime = Time.time + InitRetryInterval;
+                    tryInitialize();
+                }
+                return;
+            }
+
+            handleCustomQuestKeypress();
+        }
+
+        private void tryInitialize()
+        {
+            var plugin = QuestingBotsPlugin.Instance;
+            if (plugin == null)
+            {
+                LoggingController.LogWarning("tryInitialize: QuestingBotsPlugin.Instance is null");
+                return;
+            }
+
+            var tarkovData = plugin.GetComponent<TarkovData>();
+            if (tarkovData == null)
+            {
+                LoggingController.LogWarning("tryInitialize: TarkovData component not found on plugin");
+                return;
+            }
+
+            CurrentRaidSettings = tarkovData.GetCurrentRaidSettings();
             if (CurrentRaidSettings == null)
             {
-                LoggingController.LogError("Could not retrieve current raid settings");
+                if (!loggedInitWarning)
+                {
+                    LoggingController.LogWarning("tryInitialize: GetCurrentRaidSettings returned null, will retry...");
+                    loggedInitWarning = true;
+                }
+                return;
             }
 
             PathRenderer pathRender = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PathRenderer>();
@@ -68,15 +110,20 @@ namespace SPTQuestingBots.Components
             if (ConfigController.Config.BotSpawns.Enabled)
             {
                 BotGenerator.RunBotGenerationTasks();
+
+                if (ConfigController.Config.BotSpawns.DelayGameStartUntilBotGenFinishes)
+                {
+                    Patches.Spawning.GameStartPatch.ClearMissedWaves();
+                    Patches.Spawning.GameStartPatch.IsDelayingGameStart = true;
+                    LoggingController.LogInfo("Delaying the game start until bot generation finishes...");
+                }
             }
 
             calculateMaxDistanceBetweenSpawnPoints();
             BotObjectiveManagerFactory.Clear();
-        }
 
-        protected void Update()
-        {
-            handleCustomQuestKeypress();
+            isInitialized = true;
+            LoggingController.LogInfo("LocationData initialized successfully for " + CurrentLocation.Id);
         }
 
         public void UpdateMaxTotalBots()

@@ -20,10 +20,12 @@ namespace SPTQuestingBots
     [BepInPlugin("com.DanW.QuestingBots", "DanW-QuestingBots", "0.10.3")]
     public class QuestingBotsPlugin : BaseUnityPlugin
     {
+        public static QuestingBotsPlugin Instance { get; private set; }
         public static string ModName { get; private set; } = "???";
 
         protected void Awake()
         {
+            Instance = this;
             Patches.TarkovInitPatch.MinVersion = "4.0.0.0";
             Patches.TarkovInitPatch.MaxVersion = "4.0.99.0";
 

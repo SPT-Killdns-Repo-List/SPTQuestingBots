@@ -22,7 +22,7 @@ namespace SPTQuestingBots.Patches
         }
 
         [PatchPostfix]
-        protected static void PatchPostfix(AirdropSynchronizableObject ___airdropSynchronizableObject_0)
+        protected static void PatchPostfix(AirdropSynchronizableObject ___AirdropSynchronizableObject_0)
         {
             // Do not run this on Fika client machines
             if (!Helpers.RaidHelpers.IsHostRaid())
@@ -30,16 +30,16 @@ namespace SPTQuestingBots.Patches
                 return;
             }
 
-            AddNavMeshObstacle(___airdropSynchronizableObject_0);
+            AddNavMeshObstacle(___AirdropSynchronizableObject_0);
 
-            Vector3 airdropPosition = ___airdropSynchronizableObject_0.transform.position;
+            Vector3 airdropPosition = ___AirdropSynchronizableObject_0.transform.position;
             Singleton<GameWorld>.Instance.GetComponent<Components.BotQuestBuilder>().AddAirdropChaserQuest(airdropPosition);
         }
 
-        private static void AddNavMeshObstacle(AirdropSynchronizableObject ___airdropSynchronizableObject_0)
+        private static void AddNavMeshObstacle(AirdropSynchronizableObject airdropObj)
         {
-            NavMeshObstacle navMeshObstacle = ___airdropSynchronizableObject_0.gameObject.GetOrAddComponent<NavMeshObstacle>();
-            navMeshObstacle.size = ___airdropSynchronizableObject_0.CollisionCollider.bounds.size;
+            NavMeshObstacle navMeshObstacle = airdropObj.gameObject.GetOrAddComponent<NavMeshObstacle>();
+            navMeshObstacle.size = airdropObj.CollisionCollider.bounds.size;
             navMeshObstacle.carving = true;
         }
     }

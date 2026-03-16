@@ -47,13 +47,13 @@ namespace SPTQuestingBots.Components
 
         public RaidSettings GetCurrentRaidSettings()
         {
-            if (getTarkovApplication() == null)
+            var app = getTarkovApplication();
+            if (app == null)
             {
-                LoggingController.LogError("Invalid Tarkov application instance");
                 return null;
             }
 
-            return tarkovApplication.CurrentRaidSettings;
+            return app.CurrentRaidSettings;
         }
 
         public ISession GetSession()
@@ -75,7 +75,12 @@ namespace SPTQuestingBots.Components
                 return tarkovApplication;
             }
 
-            tarkovApplication = FindObjectOfType<TarkovApplication>();
+            // Do NOT cache null - keep retrying on each call until TarkovApplication is available
+            TarkovApplication.Exist(out TarkovApplication result);
+            if (result != null)
+            {
+                tarkovApplication = result;
+            }
 
             return tarkovApplication;
         }

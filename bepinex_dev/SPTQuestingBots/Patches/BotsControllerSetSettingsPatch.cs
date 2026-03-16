@@ -28,14 +28,6 @@ namespace SPTQuestingBots.Patches
             }
 
             Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<Components.LocationData>();
-
-            if (ConfigController.Config.BotSpawns.DelayGameStartUntilBotGenFinishes)
-            {
-                Spawning.GameStartPatch.ClearMissedWaves();
-                Spawning.GameStartPatch.IsDelayingGameStart = true;
-
-                LoggingController.LogInfo("Delaying the game start until bot generation finishes...");
-            }
         }
     }
 }

@@ -108,7 +108,7 @@ namespace SPTQuestingBots.Components
                 }
 
                 // Check which quests are currently active for the player
-                ISession session = FindObjectOfType<QuestingBotsPlugin>().GetComponent<TarkovData>().GetSession();
+                ISession session = QuestingBotsPlugin.Instance.GetComponent<TarkovData>().GetSession();
                 QuestDataClass[] activeQuestsForPlayer = session.Profile.QuestsData
                     .Where(q => q.Status == EFT.Quests.EQuestStatus.Started || q.Status == EFT.Quests.EQuestStatus.AvailableForFinish || q.Status == EFT.Quests.EQuestStatus.Success)
                     .ToArray();
