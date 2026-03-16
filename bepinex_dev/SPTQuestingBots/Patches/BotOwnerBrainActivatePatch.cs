@@ -74,7 +74,11 @@ namespace SPTQuestingBots.Patches
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
 
             botSpawnerClass.AddPlayer(__instance.GetPlayer());
-            __instance.GetPlayer().OnPlayerDead += deletePlayer;
+            // Use reflection to subscribe to OnPlayerDead to avoid CS0229 ambiguity from spt-custom.dll
+            var playerObj = __instance.GetPlayer();
+            var eventInfo = playerObj.GetType().GetEvent("OnPlayerDead", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            var handler = Delegate.CreateDelegate(eventInfo.EventHandlerType, typeof(BotOwnerBrainActivatePatch).GetMethod("deletePlayer", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static));
+            eventInfo.AddEventHandler(playerObj, handler);
         }
 
         private static void deletePlayer(Player player, IPlayer lastAgressor, DamageInfoStruct damage, EBodyPart part)
@@ -115,14 +119,14 @@ namespace SPTQuestingBots.Patches
 
             if (bot.Profile.Info.Settings.IsFollower())
             {
-                botSpawnerClass._followersBotsCount--;
+                botSpawnerClass.FollowersBotsCount--;
             }
             else if (bot.Profile.Info.Settings.IsBoss())
             {
-                botSpawnerClass._bossBotsCount--;
+                botSpawnerClass.BossBotsCount--;
             }
 
-            botSpawnerClass._allBotsCount--;
+            botSpawnerClass.AllBotsCount--;
         }
     }
 }

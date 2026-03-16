@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias SptCustom;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,6 @@ using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using EFT.InventoryLogic;
-using SPT.Custom.CustomAI;
 using SPTQuestingBots.BotLogic.Objective;
 using SPTQuestingBots.Controllers;
 using SPTQuestingBots.Helpers;
@@ -158,7 +158,7 @@ namespace SPTQuestingBots.Components
             bool isQuestOnIsland = locationData.IsPointOnLightkeeperIsland(assignmentPosition.Value);
             if (isQuestOnIsland)
             {
-                foreach (BotOwner member in bot.BotsGroup.GetAllMembers())
+                foreach (BotOwner member in bot.BotsGroup.Members.ToList())
                 {
                     botsWithQuestsOnIsland.Add(member);
                     formAlliancesWithZryachiyAndFollowers(member);

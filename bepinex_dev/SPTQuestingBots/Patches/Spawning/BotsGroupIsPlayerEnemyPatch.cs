@@ -56,7 +56,7 @@ namespace SPTQuestingBots.Patches.Spawning
                 return true;
             }
 
-            if (BotGenerator.TryGetBotGroupFromAnyGenerator(__instance._initialBot, out Models.BotSpawnInfo botSpawnInfo))
+            if (BotGenerator.TryGetBotGroupFromAnyGenerator(__instance.InitialBot, out Models.BotSpawnInfo botSpawnInfo))
             {
                 if (botSpawnInfo.ContainsProfile(player.Profile))
                 {
@@ -82,7 +82,7 @@ namespace SPTQuestingBots.Patches.Spawning
                 return;
             }
 
-            if (__instance._initialBot.Profile.Info.Settings.Role == player.Profile.Info.Settings.Role)
+            if (__instance.InitialBot.Profile.Info.Settings.Role == player.Profile.Info.Settings.Role)
             {
                 return;
             }
@@ -92,12 +92,12 @@ namespace SPTQuestingBots.Patches.Spawning
                 return;
             }
 
-            if (!__instance._initialBot.WillBeAPMC() && !__instance._initialBot.WillBeAPlayerScav())
+            if (!__instance.InitialBot.WillBeAPMC() && !__instance.InitialBot.WillBeAPlayerScav())
             {
                 return;
             }
 
-            string message = $"Group containing bot {__instance._initialBot.GetText()} will be hostile toward bot {player.GetText()}: {__result}";
+            string message = $"Group containing bot {__instance.InitialBot.GetText()} will be hostile toward bot {player.GetText()}: {__result}";
             if (!__result)
             {
                 LoggingController.LogWarning(message);

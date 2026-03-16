@@ -43,7 +43,7 @@ namespace SPTQuestingBots.Helpers
                     throw new ArgumentNullException(nameof(key));
                 }
 
-                GClass3424 unlockDoorInteractionResult = new GClass3424(key, null, true);
+                KeyInteractionResultClass unlockDoorInteractionResult = new KeyInteractionResultClass(key, null, true);
                 if (unlockDoorInteractionResult == null)
                 {
                     throw new InvalidOperationException(botOwner.GetText() + " cannot use key " + key.Item.LocalizedName() + " to unlock door " + door.Id);
@@ -55,8 +55,7 @@ namespace SPTQuestingBots.Helpers
                     key.NumberOfUsages++;
                 }
 
-                return unlockDoorInteractionResult;
-            }
+                return unlockDoorInteractionResult;            }
             catch (Exception e)
             {
                 LoggingController.LogError(e.Message);
@@ -78,7 +77,7 @@ namespace SPTQuestingBots.Helpers
                 // Modified version of BotOwner.DoorOpener.Interact(door, EInteractionType.Unlock) that can use an InteractionResult with a key component
 
                 botOwner.DoorOpener.Interacting = true;
-                botOwner.DoorOpener._traversingEnd = Time.time + botOwner.Settings.FileSettings.Move.WAIT_DOOR_OPEN_SEC;
+                botOwner.DoorOpener.TraversingEnd = Time.time + botOwner.Settings.FileSettings.Move.WAIT_DOOR_OPEN_SEC;
 
                 string interactionTypeText = "opening";
                 switch (interactionResult.InteractionType)

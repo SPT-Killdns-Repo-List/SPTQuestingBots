@@ -324,10 +324,10 @@ namespace SPTQuestingBots.BotLogic.HiveMind
             bot.BotsGroup = newGroup;
             newGroup.Lock();
 
-            currentGroup._members.Remove(bot);
+            currentGroup.Members.Remove(bot);
 
             // Make the bot's old group members friendly
-            List<BotOwner> oldGroupMembers = SPT.Custom.CustomAI.AiHelpers.GetAllMembers(currentGroup);
+            List<BotOwner> oldGroupMembers = currentGroup.Members.ToList();
             foreach (BotOwner oldGroupMember in oldGroupMembers)
             {
                 newGroup.AddAlly(oldGroupMember.GetPlayer);

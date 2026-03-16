@@ -82,7 +82,7 @@ namespace SPTQuestingBots.Components
         public void UpdateMaxTotalBots()
         {
             BotsController botControllerClass = Singleton<IBotGame>.Instance.BotsController;
-            int botmax = botControllerClass._maxCount;
+            int botmax = botControllerClass.MaxCount;
             if (botmax > 0)
             {
                 MaxTotalBots = botmax;
@@ -118,7 +118,10 @@ namespace SPTQuestingBots.Components
 
             foreach (EFT.Interactive.Switch sw in allSwitches)
             {
-                sw.OnDoorStateChanged += reportSwitchChange;
+                // Use reflection to subscribe to OnDoorStateChanged to avoid CS0229 ambiguity from spt-custom.dll
+                GDelegate83 doorStateHandler = (obj, prevState, nextState) => reportSwitchChange(obj, prevState, nextState);
+                var doorEventInfo = ((object)sw).GetType().GetEvent("OnDoorStateChanged", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                doorEventInfo.AddEventHandler(sw, doorStateHandler);
             }
         }
 

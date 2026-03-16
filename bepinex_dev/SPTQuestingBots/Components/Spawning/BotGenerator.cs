@@ -461,7 +461,7 @@ namespace SPTQuestingBots.Components.Spawning
         protected async Task<Models.BotSpawnInfo> GenerateBotGroup(WildSpawnType spawnType, BotDifficulty botdifficulty, int bots)
         {
             BotSpawner botSpawnerClass = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-            IBotCreator ibotCreator = botSpawnerClass._botCreator;
+            IBotCreator ibotCreator = botSpawnerClass.BotCreator;
 
             LoggingController.LogInfo("Generating " + botdifficulty.ToString() + " " + BotTypeName + " group (Number of bots: " + bots + ")...");
 
@@ -476,7 +476,7 @@ namespace SPTQuestingBots.Components.Spawning
                     //EPlayerSide spawnSide = spawnType.GetPlayerSide();
                     EPlayerSide spawnSide = EPlayerSide.Savage;
 
-                    GClass663 botProfileData = new GClass663(spawnSide, spawnType, botdifficulty, 0f, null);
+                    BotProfileDataClass botProfileData = new BotProfileDataClass(spawnSide, spawnType, botdifficulty, 0f, null, false);
                     BotCreationDataClass botSpawnData = await BotCreationDataClass.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
 
                     if (botSpawnData.Profiles.Count != bots)
@@ -625,7 +625,7 @@ namespace SPTQuestingBots.Components.Spawning
         private void SpawnBots(Models.BotSpawnInfo botSpawnInfo, Vector3[] positions)
         {
             BotSpawner botSpawner = Singleton<IBotGame>.Instance.BotsController.BotSpawner;
-            IBotCreator ibotCreator = botSpawner._botCreator;
+            IBotCreator ibotCreator = botSpawner.BotCreator;
 
             BotZone closestBotZone = botSpawner.GetClosestZone(positions[0], out float dist);
             foreach (Vector3 position in positions)

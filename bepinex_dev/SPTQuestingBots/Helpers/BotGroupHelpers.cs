@@ -25,7 +25,7 @@ namespace SPTQuestingBots.Helpers
                 list.Add(botOwner);
             }
 
-            BotsGroup group = new BotsGroup(zone, botSpawner.BotGame, initialBot, list, botSpawner._deadBodiesController, botSpawner._allPlayers, true);
+            BotsGroup group = new BotsGroup(zone, botSpawner.BotGame, initialBot, list, botSpawner.DeadBodiesController, botSpawner.AllPlayers, true);
             group.TargetMembersCount = targetMembersCount;
             botSpawner.Groups.Add(zone, side, group, true);
             // ------------------------------------------
@@ -95,7 +95,7 @@ namespace SPTQuestingBots.Helpers
                     .Select(e => e.Key)
                     .ToArray();
 
-            List<BotOwner> groupMemberList = SPT.Custom.CustomAI.AiHelpers.GetAllMembers(playerGroup);
+            List<BotOwner> groupMemberList = playerGroup.Members.ToList();
             string groupMembersText = string.Join(", ", groupMemberList.Select(m => m.GetText()));
 
             foreach (IPlayer remainingEnemy in enemyMatches)

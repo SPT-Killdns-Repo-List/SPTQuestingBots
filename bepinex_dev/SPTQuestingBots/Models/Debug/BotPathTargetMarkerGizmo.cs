@@ -20,12 +20,12 @@ namespace SPTQuestingBots.Models.Debug
 
         protected override bool HasValidPath()
         {
-            if (BotOwner?.Mover?._pathController?.HavePath != true)
+            if (BotOwner?.Mover?.ActualPathController?.HavePath != true)
             {
                 return false;
             }
 
-            if (!BotOwner.Mover._pathController.TargetPoint.HasValue)
+            if (!BotOwner.Mover.ActualPathController.TargetPoint.HasValue)
             {
                 return false;
             }
@@ -45,7 +45,7 @@ namespace SPTQuestingBots.Models.Debug
             return true;
         }
 
-        protected override Vector3 GetPosition() => BotOwner.Mover._pathController.TargetPoint.Value;
+        protected override Vector3 GetPosition() => BotOwner.Mover.ActualPathController.TargetPoint.Value;
         protected override NavMeshPathStatus? GetPathStatus() => null;
     }
 }

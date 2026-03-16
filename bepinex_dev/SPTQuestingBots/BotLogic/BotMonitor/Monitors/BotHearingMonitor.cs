@@ -41,7 +41,8 @@ namespace SPTQuestingBots.BotLogic.BotMonitor.Monitors
             Singleton<BotEventHandler>.Instance.OnSoundPlayed += enemySoundHeard;
             soundPlayedEventAdded = true;
 
-            BotOwner.GetPlayer.OnIPlayerDeadOrUnspawn += (player) => { removeSoundPlayedEvent(); };
+            EFT.Player localPlayer = BotOwner.GetPlayer;
+            ((EFT.IPlayer)localPlayer).OnIPlayerDeadOrUnspawn += (_) => removeSoundPlayedEvent();
 
             updateMaxSuspiciousTime();
         }

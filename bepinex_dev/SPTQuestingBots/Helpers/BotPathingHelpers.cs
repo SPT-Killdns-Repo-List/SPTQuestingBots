@@ -13,8 +13,8 @@ namespace SPTQuestingBots.Helpers
 {
     public static class BotPathingHelpers
     {
-        private static FieldInfo pathPointsField = AccessTools.Field(typeof(GClass529), "vector3_0");
-        private static FieldInfo pathIndexField = AccessTools.Field(typeof(GClass529), "int_0");
+        private static FieldInfo pathPointsField = AccessTools.Field(typeof(BotCurrentPathAbstractClass), "vector3_0");
+        private static FieldInfo pathIndexField = AccessTools.Field(typeof(BotCurrentPathAbstractClass), "int_0");
 
         public static void FollowPath(this BotOwner bot, Models.Pathing.BotPathData botPath, bool slowAtTheEnd, bool getUpWithCheck)
         {
@@ -42,55 +42,55 @@ namespace SPTQuestingBots.Helpers
 
         public static Vector3[] GetCurrentPath(this BotMover botMover)
         {
-            if (botMover?._pathController?.CurPath == null)
+            if (botMover?.ActualPathController?.CurPath == null)
             {
                 return Array.Empty<Vector3>();
             }
 
-            Vector3[] path = (Vector3[])pathPointsField.GetValue(botMover._pathController.CurPath);
+            Vector3[] path = (Vector3[])pathPointsField.GetValue(botMover.ActualPathController.CurPath);
 
             return path;
         }
 
         public static bool HasSamePathTargetPosition(this BotOwner bot, Vector3 targetPosition)
         {
-            if (bot?.Mover?._pathController == null)
+            if (bot?.Mover?.ActualPathController == null)
             {
                 return false;
             }
 
-            return bot.Mover._pathController.IsSameWay(targetPosition, bot.Position);
+            return bot.Mover.ActualPathController.IsSameWay(targetPosition, bot.Position);
         }
 
         public static bool TrySetSlowAtTheEnd(this BotMover botMover, bool slowAtTheEnd)
         {
-            if (botMover?._pathFinder == null)
+            if (botMover?.ActualPathFinder == null)
             {
                 return false;
             }
 
-            botMover._pathFinder.SlowAtTheEnd = slowAtTheEnd;
+            botMover.ActualPathFinder.SlowAtTheEnd = slowAtTheEnd;
             return true;
         }
 
         public static Vector3? GetCurrentPathCornerPosition(this BotMover botMover)
         {
-            if (botMover?._pathController?.CurPath == null)
+            if (botMover?.ActualPathController?.CurPath == null)
             {
                 return null;
             }
 
-            return botMover._pathController.CurPath.CurrentCorner();
+            return botMover.ActualPathController.CurPath.CurrentCorner();
         }
 
         public static int? GetCurrentPathCornerIndex(this BotMover botMover)
         {
-            if (botMover?._pathController?.CurPath == null)
+            if (botMover?.ActualPathController?.CurPath == null)
             {
                 return null;
             }
 
-            int index = (int)pathIndexField.GetValue(botMover._pathController.CurPath);
+            int index = (int)pathIndexField.GetValue(botMover.ActualPathController.CurPath);
 
             return index;
         }
@@ -105,12 +105,12 @@ namespace SPTQuestingBots.Helpers
 
         public static Vector3? GetCurrentPathTargetPoint(this BotMover botMover)
         {
-            if (botMover?._pathController?.CurPath == null)
+            if (botMover?.ActualPathController?.CurPath == null)
             {
                 return null;
             }
 
-            return botMover._pathController.CurPath?.TargetPoint?.Position;
+            return botMover.ActualPathController.CurPath?.TargetPoint?.Position;
         }
 
         public static bool IsPathComplete(this BotMover botMover, Vector3 destination, float maxDistanceError)

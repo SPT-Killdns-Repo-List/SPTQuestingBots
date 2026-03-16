@@ -18,16 +18,14 @@ namespace SPTQuestingBots.BehaviorExtensions
     public abstract class CustomLogicDelayedUpdate : CustomLogic
     {
         protected Components.BotObjectiveManager ObjectiveManager { get; private set; }
-        protected GClass168 baseAction { get; private set; } = null;
+        protected BotNodeAbstractClass baseAction { get; private set; } = null;
         protected static int updateInterval { get; private set; } = 100;
 
         private Stopwatch updateTimer = Stopwatch.StartNew();
         private Stopwatch actionElapsedTime = new Stopwatch();
         private Stopwatch sprintDelayTimer = Stopwatch.StartNew();
         private float sprintDelayTime = 0;
-
-        // Find by CreateNode(BotLogicDecision type, BotOwner bot) -> case BotLogicDecision.simplePatrol -> private gclass object
-        private GClass385 baseSteeringLogic = new GClass385();
+        private BotNodeAbstractClass baseSteeringLogic = null;
 
         protected double ActionElpasedTime => actionElapsedTime.ElapsedMilliseconds / 1000.0;
         protected double ActionElapsedTimeRemaining => Math.Max(0, ObjectiveManager.MinElapsedActionTime - ActionElpasedTime);
@@ -36,6 +34,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         public CustomLogicDelayedUpdate(BotOwner botOwner) : base(botOwner)
         {
             ObjectiveManager = botOwner.GetOrAddObjectiveManager();
+            baseSteeringLogic = BotActionNodesClass.CreateNode(BotLogicDecision.simplePatrol, botOwner);
         }
 
         public CustomLogicDelayedUpdate(BotOwner botOwner, int delayInterval) : this(botOwner)
@@ -70,7 +69,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             actionElapsedTime.Restart();
         }
 
-        public void SetBaseAction(GClass168 _baseAction)
+        public void SetBaseAction(BotNodeAbstractClass _baseAction)
         {
             baseAction = _baseAction;
         }
@@ -102,19 +101,17 @@ namespace SPTQuestingBots.BehaviorExtensions
             BotOwner.SetTargetMoveSpeed(1f);
             
             // Open doors blocking the bot's path
-            BotOwner.DoorOpener.Update();
+            BotOwner.DoorOpener.ManualUpdate();
         }
 
         public void UpdateBotSteering()
         {
             BotOwner.Steering.LookToMovingDirection();
-            baseSteeringLogic.Update(BotOwner);
         }
 
         public void UpdateBotSteering(Vector3 point)
         {
             BotOwner.Steering.LookToPoint(point);
-            baseSteeringLogic.Update(BotOwner);
         }
 
         public void UpdateBotMiscActions()

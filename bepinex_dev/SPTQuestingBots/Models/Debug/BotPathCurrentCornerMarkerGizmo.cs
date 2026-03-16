@@ -20,7 +20,7 @@ namespace SPTQuestingBots.Models.Debug
 
         protected override bool HasValidPath()
         {
-            if (BotOwner?.Mover?._pathController?.HavePath != true)
+            if (BotOwner?.Mover?.ActualPathController?.HavePath != true)
             {
                 return false;
             }
@@ -28,7 +28,7 @@ namespace SPTQuestingBots.Models.Debug
             // If the current corner is the same as the target point, we don't need to show the marker
             if (QuestingBotsPluginConfig.BotPathOverlayTypes.Value.HasFlag(BotPathOverlayType.EFTTarget))
             {
-                if (GetPosition() == BotOwner.Mover._pathController.TargetPoint)
+                if (GetPosition() == BotOwner.Mover.ActualPathController.TargetPoint)
                 {
                     return false;
                 }
@@ -37,7 +37,7 @@ namespace SPTQuestingBots.Models.Debug
             return true;
         }
 
-        protected override Vector3 GetPosition() => BotOwner.Mover._pathController.CurrentCorner();
+        protected override Vector3 GetPosition() => BotOwner.Mover.ActualPathController.CurrentCornerPoint;
         protected override NavMeshPathStatus? GetPathStatus() => null;
     }
 }

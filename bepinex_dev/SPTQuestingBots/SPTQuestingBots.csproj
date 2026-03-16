@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SPTQuestingBots</RootNamespace>
-    <AssemblyName>SPTQuestingBots</AssemblyName>
+    <AssemblyName>DanW-QuestingBots</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -61,8 +61,8 @@
     <Reference Include="ItemComponent.Types">
       <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\ItemComponent.Types.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Sirenix.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -73,9 +73,7 @@
     </Reference>
     <Reference Include="spt-custom">
       <HintPath>..\..\..\BepInEx\plugins\spt\spt-custom.dll</HintPath>
-    </Reference>
-    <Reference Include="spt-prepatch">
-      <HintPath>..\..\..\BepInEx\patchers\spt-prepatch.dll</HintPath>
+      <Aliases>SptCustom</Aliases>
     </Reference>
     <Reference Include="spt-reflection">
       <HintPath>..\..\..\BepInEx\plugins\spt\spt-reflection.dll</HintPath>
@@ -320,9 +318,6 @@
     <Compile Include="QuestingBotsPlugin.cs" />
     <Compile Include="QuestingBotsPluginConfig.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
+
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
