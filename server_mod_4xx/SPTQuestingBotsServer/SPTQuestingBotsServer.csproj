@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>SPTQuestingBotsServer</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+    <Version>0.11.0</Version>
+    <OutputPath>bin\$(Configuration)\$(ProjectName)\$(AssemblyName)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <!-- Suppress nullable warnings that come from base-class mismatches in SPT NuGet -->
+    <NoWarn>CS8764;CS8603;CS8602</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SPTarkov.Common"      Version="4.0.3" />
+    <PackageReference Include="SPTarkov.DI"          Version="4.0.3" />
+    <PackageReference Include="SPTarkov.Reflection"  Version="4.0.3" />
+    <PackageReference Include="SPTarkov.Server.Core" Version="4.0.3" />
+    <PackageReference Include="SPTarkov.Server.Web"  Version="4.0.3" />
+  </ItemGroup>
+
+  <!--
+    Config files linked from the original mod folder.
+    Path: server_mod_4xx\SPTQuestingBotsServer\ -> ..\..\config\ = SPTQuestingBots\config\
+  -->
+  <ItemGroup>
+    <Content Include="..\..\config\config.json"
+             Link="config\config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\config\eftQuestSettings.json"
+             Link="config\eftQuestSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\config\zoneAndItemQuestPositions.json"
+             Link="config\zoneAndItemQuestPositions.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
+  </PropertyGroup>
+
+</Project>
