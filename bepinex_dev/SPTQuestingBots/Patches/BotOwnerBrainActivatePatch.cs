@@ -34,9 +34,6 @@ namespace SPTQuestingBots.Patches
             {
                 Controllers.BotRegistrationManager.MakeBotGroupHostileTowardAllBosses(__instance);
             }
-
-            // Fix for bots getting stuck in Standby when enemy PMC's are near them
-            __instance.StandBy.CanDoStandBy = false;
         }
 
         private static void registerBot(BotOwner __instance)
@@ -67,6 +64,14 @@ namespace SPTQuestingBots.Patches
         private static void registerBotAsHumanPlayer(BotOwner __instance)
         {
             if (!ConfigController.Config.BotSpawns.Enabled)
+            {
+                return;
+            }
+
+            // When SAIN is installed, it manages bot registration in BotSpawner itself.
+            // Calling AddPlayer here would trigger SAIN's PlayerSpawnTracker at the wrong time,
+            // causing BotComponent.OnDisable() NRE due to uninitialized SAINActivationClass.
+            if (BotLogic.ExternalMods.ExternalModHandler.SAINModInfo.IsInstalled)
             {
                 return;
             }

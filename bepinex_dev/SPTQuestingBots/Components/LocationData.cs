@@ -469,6 +469,12 @@ namespace SPTQuestingBots.Components
                 return null;
             }
 
+            // MainPlayer is null on Fika Headless
+            if (Singleton<GameWorld>.Instance.MainPlayer == null)
+            {
+                return null;
+            }
+
             return Singleton<GameWorld>.Instance.MainPlayer.Position;
         }
 
@@ -948,7 +954,13 @@ namespace SPTQuestingBots.Components
                 return;
             }
 
+            // MainPlayer is null on Fika Headless
             Player mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
+            if (mainPlayer == null)
+            {
+                return;
+            }
+
             if (!mainPlayer.isActiveAndEnabled || !mainPlayer.HealthController.IsAlive)
             {
                 return;
