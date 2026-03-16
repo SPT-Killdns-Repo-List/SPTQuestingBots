@@ -24,6 +24,15 @@ public class ModConfig(
     public static bool     DisableRogueDelay         { get; private set; } = true;
     public static string[] BlacklistedPmcBotBrains   { get; private set; } = [];
 
+    /// <summary>
+    /// Called by SpawnSystemController when a conflicting spawning mod is detected.
+    /// Also patches ConfigJson so the BepInEx plugin receives the updated value.
+    /// </summary>
+    public static void SetBotSpawnsEnabled(bool value)
+    {
+        BotSpawnsEnabled = value;
+    }
+
     public static string ModPath { get; private set; } = string.Empty;
 
     public async Task OnLoad()
